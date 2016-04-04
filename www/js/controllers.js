@@ -2,13 +2,6 @@ angular.module('toroApp.controllers', [])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
 
-  // With the new view caching in Ionic, Controllers are only called
-  // when they are recreated or on app start, instead of every page change.
-  // To listen for when this page is active (for example, to refresh data),
-  // listen for the $ionicView.enter event:
-  //$scope.$on('$ionicView.enter', function(e) {
-  //});
-
   // Form data for the login modal
   $scope.loginData = {};
 
@@ -61,9 +54,37 @@ angular.module('toroApp.controllers', [])
 
 }])
 
-.controller('StockCtrl', ['$scope', '$stateParams',
-  function($scope, $stateParams) {
+.controller('StockCtrl', ['$scope', '$stateParams', 'stockDataService', 'dateService',
+  function($scope, $stateParams, stockDataService, dateService) {
 
     $scope.ticker = $stateParams.stockTicker;
+    $scope.chartView = 1;
+
+    $scope.$on("$ionicView.afterEnter", function() {
+      getPriceData();
+      getDetailsData();
+    });
+
+    $scope.chartViewFunc = function(n) {
+      $scope.chartView = n;
+    };
+
+    function getPriceData() {
+
+      var promise = stockDataService.getPriceData($scope.ticker);
+
+      promise.then(function(data) {
+        $scope.stockPriceData = data;
+      });
+    }
+
+    function getDetailsData() {
+
+      var promise = stockDataService.getDetailsData($scope.ticker);
+
+      promise.then(function(data) {
+        $scope.stockDetailsData = data;
+      });
+    }
 
 }]);
