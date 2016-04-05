@@ -1,5 +1,6 @@
 angular.module('toroApp', [
   'ionic',
+  'angular-cache',
   'toroApp.directives',
   'toroApp.controllers',
   'toroApp.services',
@@ -54,6 +55,6 @@ angular.module('toroApp', [
         }
       }
     });
-  // if none of the above states are matched, use this as the fallback
+
   $urlRouterProvider.otherwise('/app/my_stocks');
 });

@@ -39,10 +39,6 @@
   float: right;
 }
 
-
-
-
-
 /* Stock navbar  */
 
 #stock-navbar ion-header-bar {
@@ -52,10 +48,6 @@
 #stock-navbar .back-text {
   font-size: 11pt;
 }
-
-
-
-
 
 /* Stock subheader bar  */
 
@@ -89,9 +81,6 @@
 }
 
 
-
-
-
 /* Short button bar  */
 
 #short-button-bar .button {
@@ -110,10 +99,6 @@
 #short-button-bar {
   -webkit-box-shadow: 0px 0px 0px 1px #ddd;
 }
-
-
-
-
 
 /* Chart Styles  */
 
@@ -211,10 +196,6 @@
   stroke: #ccc;
 }
 
-
-
-
-
 /* Helper Styles  */
 
 .display-flex {
@@ -224,10 +205,6 @@
 .no-margin {
   margin: 0 !important;
 }
-
-
-
-
 
 /* Adjustment Styles  */
 
