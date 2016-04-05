@@ -56,9 +56,9 @@ angular.module('toroApp.controllers', [])
 
 .controller('StockCtrl', [
       '$scope', '$stateParams', '$window', '$ionicPopup', 'stockDataService',
-      'chartDataService', 'dateService', 'notesService',
+      'chartDataService', 'dateService', 'notesService', 'newsService',
     function($scope, $stateParams, $window, $ionicPopup, stockDataService,
-      chartDataService, dateService, notesService) {
+      chartDataService, dateService, notesService, newsService) {
 
       $scope.ticker = $stateParams.stockTicker;
       $scope.stockNotes = [];
@@ -71,6 +71,7 @@ angular.module('toroApp.controllers', [])
         getPriceData();
         getDetailsData();
         getChartData();
+        getNews();
         $scope.stockNotes = notesService.getNotes($scope.ticker);
       });
 
@@ -242,4 +243,20 @@ angular.module('toroApp.controllers', [])
           $scope.stockNotes = notesService.getNotes($scope.ticker);
           });
         };
+
+    function getNews() {
+
+      $scope.newsStories = [];
+
+      var promise = newsService.getNews($scope.ticker);
+
+      promise.then(function(data) {
+        $scope.newsStories = data;
+      });
+    }
+
+    $scope.openWindow = function(link) {
+      //TODO install and set up inAppBrowser
+      console.log("openWindow –> " + link);
+    };
 }]);

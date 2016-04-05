@@ -1,12 +1,13 @@
 angular.module('toroApp', [
   'ionic',
-  'angular-cache',
   'toroApp.directives',
   'toroApp.controllers',
   'toroApp.services',
   'toroApp.filters',
   'nvd3',
-  'nvChart'
+  'nvChart',
+  'angular-cache',
+  'cb.x2js'
   ])
 
 
