@@ -54,120 +54,192 @@ angular.module('toroApp.controllers', [])
 
 }])
 
-.controller('StockCtrl', ['$scope', '$stateParams', 'stockDataService', 'dateService', 'chartDataService', '$window',
-  function($scope, $stateParams, stockDataService, dateService, chartDataService, $window) {
+.controller('StockCtrl', [
+      '$scope', '$stateParams', '$window', '$ionicPopup', 'stockDataService',
+      'chartDataService', 'dateService', 'notesService',
+    function($scope, $stateParams, $window, $ionicPopup, stockDataService,
+      chartDataService, dateService, notesService) {
 
-    $scope.ticker = $stateParams.stockTicker;
-    $scope.oneYearAgoDate = dateService.oneYearAgoDate();
-    $scope.todayDate = dateService.currentDate();
-    $scope.chartView = 4;
+      $scope.ticker = $stateParams.stockTicker;
+      $scope.stockNotes = [];
 
-    $scope.$on("$ionicView.afterEnter", function() {
-      getPriceData();
-      getDetailsData();
-      getChartData();
-    });
+      $scope.oneYearAgoDate = dateService.oneYearAgoDate();
+      $scope.todayDate = dateService.currentDate();
+      $scope.chartView = 4;
 
-    $scope.chartViewFunc = function(n) {
-      $scope.chartView = n;
-    };
-
-    function getPriceData() {
-
-      var promise = stockDataService.getPriceData($scope.ticker);
-
-      promise.then(function(data) {
-        $scope.stockPriceData = data;
-
-        if(data.chg_percent >= 0 && data !== null) {
-          $scope.reactiveColor = {'background-color': '#33cd5f'};
-        }
-        else if(data.chg_percent < 0 && data !== null) {
-          $scope.reactiveColor = {'background-color' : '#ef473a'};
-        }
+      $scope.$on("$ionicView.afterEnter", function() {
+        getPriceData();
+        getDetailsData();
+        getChartData();
+        $scope.stockNotes = notesService.getNotes($scope.ticker);
       });
-    }
 
-    function getDetailsData() {
+      $scope.chartViewFunc = function(n) {
+        $scope.chartView = n;
+      };
 
-      var promise = stockDataService.getDetailsData($scope.ticker);
+      function getPriceData() {
 
-      promise.then(function(data) {
-        $scope.stockDetailsData = data;
-      });
-    }
+        var promise = stockDataService.getPriceData($scope.ticker);
 
-    function getChartData() {
+        promise.then(function(data) {
+          $scope.stockPriceData = data;
 
-      var promise = chartDataService.getHistoricalData($scope.ticker, $scope.oneYearAgoDate, $scope.todayDate);
+          if(data.chg_percent >= 0 && data !== null) {
+            $scope.reactiveColor = {'background-color': '#33cd5f'};
+          }
+          else if(data.chg_percent < 0 && data !== null) {
+            $scope.reactiveColor = {'background-color' : '#ef473a'};
+          }
+        });
+      }
 
-      promise.then(function(data) {
+      function getDetailsData() {
 
-        $scope.myData = JSON.parse(data)
-        	.map(function(series) {
-        		series.values = series.values.map(function(d) { return {x: d[0], y: d[1] }; });
-        		return series;
-        	});
-      });
-    }
+        var promise = stockDataService.getDetailsData($scope.ticker);
 
-  	var xTickFormat = function(d) {
-  		var dx = $scope.myData[0].values[d] && $scope.myData[0].values[d].x || 0;
-  		if (dx > 0) {
-        return d3.time.format("%b %d")(new Date(dx));
-  		}
-  		return null;
-  	};
+        promise.then(function(data) {
+          $scope.stockDetailsData = data;
+        });
+      }
 
-    var x2TickFormat = function(d) {
-      var dx = $scope.myData[0].values[d] && $scope.myData[0].values[d].x || 0;
-      return d3.time.format('%b %Y')(new Date(dx));
-    };
+      function getChartData() {
 
-    var y1TickFormat = function(d) {
-      return d3.format(',f')(d);
-    };
+        var promise = chartDataService.getHistoricalData($scope.ticker, $scope.oneYearAgoDate, $scope.todayDate);
 
-    var y2TickFormat = function(d) {
-      return d3.format('s')(d);
-    };
+        promise.then(function(data) {
 
-    var y3TickFormat = function(d) {
-      return d3.format(',.2s')(d);
-    };
+          $scope.myData = JSON.parse(data)
+          	.map(function(series) {
+          		series.values = series.values.map(function(d) { return {x: d[0], y: d[1] }; });
+          		return series;
+          	});
+        });
+      }
 
-    var y4TickFormat = function(d) {
-      return d3.format(',.2s')(d);
-    };
+    	var xTickFormat = function(d) {
+    		var dx = $scope.myData[0].values[d] && $scope.myData[0].values[d].x || 0;
+    		if (dx > 0) {
+          return d3.time.format("%b %d")(new Date(dx));
+    		}
+    		return null;
+    	};
 
-    var xValueFunction = function(d, i) {
-      return i;
-    };
+      var x2TickFormat = function(d) {
+        var dx = $scope.myData[0].values[d] && $scope.myData[0].values[d].x || 0;
+        return d3.time.format('%b %Y')(new Date(dx));
+      };
 
-    var marginBottom = ($window.innerWidth / 100) * 10;
+      var y1TickFormat = function(d) {
+        return d3.format(',f')(d);
+      };
 
-  	$scope.chartOptions = {
-      chartType: 'linePlusBarWithFocusChart',
-      data: 'myData',
-      margin: {top: 15, right: 0, bottom: marginBottom, left: 0},
-      interpolate: "cardinal",
-      useInteractiveGuideline: false,
-      yShowMaxMin: false,
-      tooltips: false,
-      showLegend: false,
-      useVoronoi: false,
-      xShowMaxMin: false,
-      xValue: xValueFunction,
-      xAxisTickFormat: xTickFormat,
-      x2AxisTickFormat: x2TickFormat,
-      y1AxisTickFormat: y1TickFormat,
-      y2AxisTickFormat: y2TickFormat,
-      y3AxisTickFormat: y3TickFormat,
-      y4AxisTickFormat: y4TickFormat,
-      transitionDuration: 500,
-      y1AxisLabel: 'Price',
-      y3AxisLabel: 'Volume',
-      noData: 'Loading Data...'
-  	};
+      var y2TickFormat = function(d) {
+        return d3.format('s')(d);
+      };
 
+      var y3TickFormat = function(d) {
+        return d3.format(',.2s')(d);
+      };
+
+      var y4TickFormat = function(d) {
+        return d3.format(',.2s')(d);
+      };
+
+      var xValueFunction = function(d, i) {
+        return i;
+      };
+
+      var marginBottom = ($window.innerWidth / 100) * 10;
+
+    	$scope.chartOptions = {
+        chartType: 'linePlusBarWithFocusChart',
+        data: 'myData',
+        margin: {top: 15, right: 0, bottom: marginBottom, left: 0},
+        interpolate: "cardinal",
+        useInteractiveGuideline: false,
+        yShowMaxMin: false,
+        tooltips: false,
+        showLegend: false,
+        useVoronoi: false,
+        xShowMaxMin: false,
+        xValue: xValueFunction,
+        xAxisTickFormat: xTickFormat,
+        x2AxisTickFormat: x2TickFormat,
+        y1AxisTickFormat: y1TickFormat,
+        y2AxisTickFormat: y2TickFormat,
+        y3AxisTickFormat: y3TickFormat,
+        y4AxisTickFormat: y4TickFormat,
+        transitionDuration: 500,
+        y1AxisLabel: 'Price',
+        y3AxisLabel: 'Volume',
+        noData: 'Loading Data...'
+    	};
+
+      $scope.addNote = function() {
+        $scope.note = {title: 'Note', body: '', date: $scope.todayDate, ticker: $scope.ticker};
+
+        var note = $ionicPopup.show({
+          template: '<input type="text" ng-model="note.title" id="stock-note-title"><textarea type="text" ng-model="note.body" id="stock-note-body"></textarea>',
+          title: 'New Note for ' + $scope.ticker,
+          scope: $scope,
+          buttons: [
+            {
+              text: '<b>Save</b>',
+              type: 'button-balanced',
+              onTap: function(e) {
+                notesService.addNote($scope.ticker, $scope.note);
+              }
+             },
+            {
+              text: 'Cancel',
+              onTap: function(e) {
+              return;
+              }
+            }
+          ]
+        });
+
+        note.then(function(res) {
+          $scope.stockNotes = notesService.getNotes($scope.ticker);
+        });
+      };
+
+      $scope.openNote = function(index, title, body) {
+        $scope.note = {title: title, body: body, date: $scope.todayDate, ticker: $scope.ticker};
+
+        var note = $ionicPopup.show({
+          template: '<input type="text" ng-model="note.title" id="stock-note-title"><textarea type="text" ng-model="note.body" id="stock-note-body"></textarea>',
+          title: $scope.note.title,
+          scope: $scope,
+          buttons: [
+            {
+              text: '<b>Save</b>',
+              type: 'button-balanced button-small',
+              onTap: function(e) {
+                notesService.deleteNote($scope.ticker, index);
+                notesService.addNote($scope.ticker, $scope.note);
+              }
+             },
+            {
+              text: 'Cancel',
+              type: 'button-small',
+              onTap: function(e) {
+                return;
+              }
+             },
+            {
+              text: 'Delete',
+              type: 'button-assertive button-small',
+              onTap: function(e) {
+                notesService.deleteNote($scope.ticker, index);
+               }
+              }
+          ]
+        });
+
+        note.then(function(res) {
+          $scope.stockNotes = notesService.getNotes($scope.ticker);
+          });
+        };
 }]);
