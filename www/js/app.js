@@ -3,7 +3,9 @@ angular.module('toroApp', [
   'toroApp.directives',
   'toroApp.controllers',
   'toroApp.services',
-  'toroApp.filters'
+  'toroApp.filters',
+  'nvd3',
+  'nvChart'
   ])
 
 
