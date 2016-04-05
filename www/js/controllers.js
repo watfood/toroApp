@@ -164,7 +164,10 @@ angular.module('toroApp.controllers', [])
       y2AxisTickFormat: y2TickFormat,
       y3AxisTickFormat: y3TickFormat,
       y4AxisTickFormat: y4TickFormat,
-      transitionDuration: 500
+      transitionDuration: 500,
+      y1AxisLabel: 'Price',
+      y3AxisLabel: 'Volume',
+      noData: 'Loading Data...'
   	};
 
 }]);
