@@ -323,6 +323,8 @@ svg text {
 #my-stocks h6 {
   font-size: 3vmin;
   font-weight: 300;
+  white-space: normal;
+  max-height: 14px;
 }
 
 #my-stocks .stock-price-time {
@@ -337,7 +339,7 @@ svg text {
 #my-stocks .stock-change {
   border-bottom-left-radius: 3px;
   border-top-left-radius: 3px;
-  margin-right: -40px;
+  margin-right: -10px;
 }
 
 #my-stocks .stock-change h3,

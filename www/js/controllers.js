@@ -60,6 +60,23 @@ angular.module('toroApp.controllers', [])
     };
 }])
 
+.controller('LoginSignupCtrl', ['$scope', 'modalService',
+  function($scope, modalService) {
+
+    $scope.user = {email: '', password: ''};
+
+    $scope.closeModal = function() {
+      modalService.closeModal();
+    };
+
+    $scope.signup = function(user) {
+      userService.signup(user);
+    };
+
+    $scope.login = function(user) {
+      userService.login(user);
+    };
+}])
 
 .controller('StockCtrl', [
       '$scope', '$stateParams', '$window', '$ionicPopup', 'followStockService',
