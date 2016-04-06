@@ -44,5 +44,32 @@ angular.module('toroApp.filters', [])
       return $filter('number')(((isNegative ? '-' : '') + abs + key), 3);
     }
   };
-});
+})
 // Tim Jones megaNumber gist — https://gist.github.com/timgit/7bc5896f5297301afb02
+
+.filter('characters', function () {
+  return function (input, chars, breakOnWord, ellipsis) {
+    if (isNaN(chars)) return input;
+    if (chars <= 0) return '';
+    if (input && input.length > chars) {
+      input = input.substring(0, chars);
+
+      if (!breakOnWord) {
+        var lastspace = input.lastIndexOf(' ');
+        //get last space
+        if (lastspace !== -1) {
+            input = input.substr(0, lastspace);
+        }
+      }
+      else {
+        while(input.charAt(input.length-1) === ' '){
+            input = input.substr(0, input.length -1);
+        }
+      }
+
+      if(ellipsis) return input + '…';
+      if(!ellipsis) return input;
+    }
+    return input;
+  };
+});

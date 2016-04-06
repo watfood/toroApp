@@ -34,35 +34,25 @@ angular.module('toroApp.controllers', [])
   };
 })
 
-.controller('MyStocksCtrl', ['$scope',
-  function($scope) {
+.controller('MyStocksCtrl', ['$scope', 'myStocksArrayService',
+  function($scope, myStocksArrayService) {
 
-    $scope.myStocksArray = [
-      {ticker: "TSLA"},
-      {ticker: "FB"},
-      {ticker: "GPRO"},
-      {ticker: "SPY"},
-      {ticker: "AAPL"},
-      {ticker: "NFLX"},
-      {ticker: "BRK-A"},
-      {ticker: "INTC"},
-      {ticker: "MSFT"},
-      {ticker: "GE"},
-      {ticker: "BAC"},
-      {ticker: "NUGT"}
-    ];
+    $scope.myStocksArray = myStocksArrayService;
 
 }])
 
 .controller('StockCtrl', [
-      '$scope', '$stateParams', '$window', '$ionicPopup', 'stockDataService',
-      'chartDataService', 'dateService', 'notesService', 'newsService',
-    function($scope, $stateParams, $window, $ionicPopup, stockDataService,
-      chartDataService, dateService, notesService, newsService) {
+      '$scope', '$stateParams', '$window', '$ionicPopup', 'followStockService',
+      'stockDataService', 'chartDataService', 'dateService',
+      'notesService', 'newsService',
+    function($scope, $stateParams, $window, $ionicPopup, followStockService,
+       stockDataService, chartDataService, dateService,
+       notesService, newsService) {
 
       $scope.ticker = $stateParams.stockTicker;
       $scope.stockNotes = [];
 
+      $scope.following = followStockService.checkFollowing($scope.ticker);
       $scope.oneYearAgoDate = dateService.oneYearAgoDate();
       $scope.todayDate = dateService.currentDate();
       $scope.chartView = 4;
@@ -87,10 +77,10 @@ angular.module('toroApp.controllers', [])
           $scope.stockPriceData = data;
 
           if(data.chg_percent >= 0 && data !== null) {
-            $scope.reactiveColor = {'background-color': '#33cd5f'};
+            $scope.reactiveColor = {'background-color': '#33cd5f', 'border-color': 'rgba(255,255,255,.3)'};
           }
           else if(data.chg_percent < 0 && data !== null) {
-            $scope.reactiveColor = {'background-color' : '#ef473a'};
+            $scope.reactiveColor = {'background-color' : '#ef473a', 'border-color': 'rgba(0,0,0,.2)'};
           }
         });
       }
@@ -259,4 +249,15 @@ angular.module('toroApp.controllers', [])
       //TODO install and set up inAppBrowser
       console.log("openWindow –> " + link);
     };
+
+    $scope.toggleFollow = function() {
+     if($scope.following) {
+       followStockService.unfollow($scope.ticker);
+       $scope.following = false;
+     }
+     else {
+       followStockService.follow($scope.ticker);
+       $scope.following = true;
+     }
+   };
 }]);
