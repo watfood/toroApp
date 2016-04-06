@@ -1,5 +1,48 @@
 angular.module('toroApp.services', [])
 
+.service('modalService', function($ionicModal) {
+
+  this.openModal = function(id) {
+
+    var _this = this;
+
+    if(id == 1) {
+      $ionicModal.fromTemplateUrl('templates/search.html', {
+        scope: null,
+        controller: 'SearchCtrl'
+      }).then(function(modal) {
+        _this.modal = modal;
+        _this.modal.show();
+      });
+    }
+    else if(id == 2) {
+      $ionicModal.fromTemplateUrl('templates/login.html', {
+        scope: $scope
+      }).then(function(modal) {
+        $scope.modal = modal;
+      });
+    }
+    else if(id == 3) {
+      $ionicModal.fromTemplateUrl('templates/login.html', {
+        scope: $scope
+      }).then(function(modal) {
+        $scope.modal = modal;
+      });
+    }
+  };
+
+  this.closeModal = function() {
+
+    var _this = this;
+
+    if(!_this.modal) return;
+    _this.modal.hide();
+    _this.modal.remove();
+  };
+
+})
+
+
 .factory('encodeURIService', function() {
   return {
     encode: function(string) {
@@ -28,7 +71,7 @@ angular.module('toroApp.services', [])
   };
 })
 
-.factory('stockDataService', function($q, $http, encodeURIService, stockDetailsCacheService) {
+.factory('stockDataService', function($q, $http, encodeURIService, stockDetailsCacheService, stockPriceCacheService) {
 
   var getDetailsData = function(ticker) {
 
@@ -62,11 +105,15 @@ angular.module('toroApp.services', [])
   var getPriceData = function(ticker) {
 
     var deferred = $q.defer(),
+
+    cacheKey =ticker,
+
     url = "http://finance.yahoo.com/webservice/v1/symbols/" + ticker + "/quote?format=json&view=detail";
 
     $http.get(url)
       .success(function(json) {
         var jsonData = json.list.resources[0].resource.fields;
+        stockPriceCacheService.put(cacheKey, jsonData);
         deferred.resolve(jsonData);
       })
       .error(function(error) {
@@ -184,6 +231,25 @@ angular.module('toroApp.services', [])
 
   return stockDetailsCache;
 })
+
+.factory('stockPriceCacheService', function(CacheFactory) {
+
+  var stockpriceCache;
+
+  if(!CacheFactory.get('stockPriceCache')) {
+    stockPriceCache = CacheFactory('stockPriceCache', {
+      maxAge: 5 * 1000,
+      deleteOnExpire: 'aggressive',
+      storageMode: 'localStorage'
+    });
+  }
+  else {
+    stockpriceCache = CacheFactory.get('stockPriceCache');
+  }
+
+  return stockPriceCache;
+})
+
 
 .factory('notesCacheService', function(CacheFactory) {
 
@@ -358,4 +424,35 @@ angular.module('toroApp.services', [])
       return false;
     }
   };
-});
+})
+
+.factory('searchService', function($q, $http) {
+
+  return {
+
+    search: function(query) {
+
+      var deferred = $q.defer(),
+
+      url = 'https://s.yimg.com/aq/autoc?query=' + query + '&region=CA&lang=en-CA&callback=YAHOO.util.ScriptNodeDataSource.callbacks';
+
+      YAHOO = window.YAHOO = {
+        util: {
+          ScriptNodeDataSource: {}
+        }
+      };
+
+      YAHOO.util.ScriptNodeDataSource.callbacks = function(data) {
+        var jsonData = data.ResultSet.Result;
+        deferred.resolve(jsonData);
+      };
+
+      $http.jsonp(url)
+        .then(YAHOO.util.ScriptNodeDataSource.callbacks);
+
+      return deferred.promise;
+    }
+  };
+})
+
+;

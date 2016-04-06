@@ -1,5 +1,6 @@
 angular.module('toroApp.filters', [])
 
+
 .filter("shrinkNumber", function($filter) {
   return function(number, fractionSize) {
 
