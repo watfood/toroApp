@@ -7,7 +7,8 @@ angular.module('toroApp', [
   'nvd3',
   'nvChart',
   'angular-cache',
-  'cb.x2js'
+  'cb.x2js',
+  'firebase'
   ])
 
 

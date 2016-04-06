@@ -1,5 +1,68 @@
 angular.module('toroApp.services', [])
 
+.constant('FIREBASE_URL', 'https://shining-inferno-6099.firebaseio.com/')
+
+.factory('firebaseRef', function($firebase, FIREBASE_URL) {
+
+  var firebaseRef = new Firebase(FIREBASE_URL);
+
+  return firebaseRef;
+})
+
+
+.factory('userService', function($rootScope, firebaseRef, modalService) {
+
+  var login = function(user) {
+
+    firebaseRef.authWithPassword({
+      email    : user.email,
+      password : user.password
+    }, function(error, authData) {
+      if (error) {
+        console.log("Login Failed!", error);
+      }
+      else {
+        $rootScope.currentUser = user;
+        modalService.closeModal();
+      }
+    });
+  };
+
+  var signup = function(user) {
+
+    firebaseRef.createUser({
+      email    : user.email,
+      password : user.password
+    }, function(error, userData) {
+      if (error) {
+        console.log("Error creating user:", error);
+      }
+      else {
+        login(user);
+      }
+    });
+  };
+
+  var logout = function() {
+    firebaseRef.unauth();
+    $rootScope.currentUser = '';
+  };
+
+  var getUser = function() {
+    return firebaseRef.getAuth();
+  };
+
+  if(getUser()) {
+    $rootScope.currentUser = getUser();
+  }
+
+  return {
+    login: login,
+    signup: signup,
+    logout: logout
+  };
+})
+
 .service('modalService', function($ionicModal) {
 
   this.openModal = function(id) {

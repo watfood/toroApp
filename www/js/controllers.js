@@ -1,9 +1,12 @@
 angular.module('toroApp.controllers', [])
 
-.controller('AppCtrl', ['$scope', 'modalService',
-  function($scope, modalService) {
+.controller('AppCtrl', ['$scope', 'modalService', 'userService',
+  function($scope, modalService, userService) {
 
     $scope.modalService = modalService;
+    $scope.logout = function() {
+      userService.logout();
+     };
 
 }])
 
@@ -60,8 +63,8 @@ angular.module('toroApp.controllers', [])
     };
 }])
 
-.controller('LoginSignupCtrl', ['$scope', 'modalService',
-  function($scope, modalService) {
+.controller('LoginSignupCtrl', ['$scope', 'modalService', 'userService',
+  function($scope, modalService, userService) {
 
     $scope.user = {email: '', password: ''};
 
