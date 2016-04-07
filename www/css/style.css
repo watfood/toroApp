@@ -57,6 +57,7 @@
 
 #stock-name {
   color: #333;
+  /*color: #fff;*/
   float: left;
   font-size: 3.5vmin;
   font-weight: normal;
@@ -313,12 +314,20 @@ svg text {
 
 /* My Stocks */
 
+
+
+#my-stocks {
+  background-color: rgba(20, 20, 20, .975);
+}
+
 #my-stocks .item-content {
   padding: 5px 0px 5px 5px;
+  background-color: rgba(20, 20, 20, .975);
 }
 
 #my-stocks h3 {
   font-size: 4.75vmin;
+  color: #fff;
 }
 
 #my-stocks h6 {
@@ -326,6 +335,7 @@ svg text {
   font-weight: 300;
   white-space: normal;
   max-height: 14px;
+  color: #fff;
 }
 
 #my-stocks .stock-price-time {
@@ -352,6 +362,8 @@ svg text {
   -webkit-box-shadow: inset 0px 0px 15px rgba(0, 0, 0, .15);
 }
 
+/* Splash Intro Page */
+
 .bull {
     background: url(../img/torosplash2.jpg);
     background-repeat: no-repeat;
@@ -369,12 +381,12 @@ svg text {
 }
 
 .bull h1 {
-  color: white;
+  color: #fff;
 }
 .bull h3{
-  color: white;
+  color: #fff;
 }
 
-#intro {
+#splash {
   background-color: rgba(20, 20, 20, .975);
 }
