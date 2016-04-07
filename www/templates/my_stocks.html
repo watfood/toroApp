@@ -1,4 +1,4 @@
-<ion-view view-title="My Stocks" id="my-stocks">
+<ion-view view-title="Toro" id="my-stocks">
 
     <ion-nav-buttons side="right">
       <button class="button button-clear" ng-click="modalService.openModal(1)">
@@ -6,7 +6,7 @@
       </button>
     </ion-nav-buttons>
 
-  <ion-content>
+  <ion-content ng-show="currentUser">
     <ion-refresher
       pulling-text="Pull to refresh..."
       on-refresh="getMyStocksData()"
@@ -22,12 +22,12 @@
              <h6 ng-bind-html="::stock.name"></h6>
            </div>
            <div class="col col-25 stock-price-time">
-             <h3>{{stock.price | shrinkNumber:2}}</h3>
-             <h6>{{stock.utctime | date: 'h:mm: a'}}</h6>
+             <h3>${{stock.price | number:2}}</h3>
+             <h6>{{stock.utctime | date: 'h:mm a'}}</h6>
            </div>
            <div class="col col-33 stock-change" ng-class="stock.change >= 0 ? 'background-green' : 'background-red'">
-             <h3><span ng-if="stock.change >= 0">+</span>{{stock.chg_percent | number:3}}</h3>
-             <h6><span ng-if="stock.change >= 0">+</span>{{stock.change | shrinkNumber:2}}</h6>
+             <h3><span ng-if="stock.change >= 0">+</span>{{stock.chg_percent | number:2}}%</h3>
+             <h6><span ng-if="stock.change >= 0">+</span>${{stock.change | number:2}}</h6>
            </div>
          </div>
         <ion-option-button class="button-light icon ion-minus-circled color-red inset-shadow" ng-click="unfollowStock(stock.symbol)"></ion-option-button>
@@ -35,4 +35,19 @@
       </ion-item>
     </ion-list>
   </ion-content>
+///////////////////
+  <ion-content ng-hide="currentUser" id="intro">
+    <div class="bull">
+      <h1>Toro</h1>
+      <h3>master the bull market</h3>
+    </div>
+
+
+      <label class="item item-floating-label">
+          <button class="button button-dark" ng-click="modalService.openModal(2)" type="submit">Log In</button>
+          <button class="button button-dark" ng-click="modalService.openModal(3)" type="submit">Sign Up</button>
+      </label>
+
+  </ion-content>
+
 </ion-view>

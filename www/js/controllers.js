@@ -95,7 +95,7 @@ angular.module('toroApp.controllers', [])
       $scope.following = followStockService.checkFollowing($scope.ticker);
       $scope.oneYearAgoDate = dateService.oneYearAgoDate();
       $scope.todayDate = dateService.currentDate();
-      $scope.chartView = 4;
+      $scope.chartView = 1;
 
       $scope.$on("$ionicView.afterEnter", function() {
         getPriceData();
