@@ -1,5 +1,5 @@
 angular.module('toroApp', [
-  'ionic',
+  'ionic','ionic.service.core',
   'toroApp.directives',
   'toroApp.controllers',
   'toroApp.services',
@@ -8,7 +8,8 @@ angular.module('toroApp', [
   'nvChart',
   'angular-cache',
   'cb.x2js',
-  'firebase'
+  'firebase',
+  'ngCordova'
   ])
 
 
@@ -23,7 +24,7 @@ angular.module('toroApp', [
     }
     if (window.StatusBar) {
       // org.apache.cordova.statusbar required
-      StatusBar.styleDefault();
+      StatusBar.styleHex("#ffffff");
     }
   });
 })

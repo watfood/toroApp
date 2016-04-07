@@ -82,11 +82,11 @@ angular.module('toroApp.controllers', [])
 }])
 
 .controller('StockCtrl', [
-      '$scope', '$stateParams', '$window', '$ionicPopup', 'followStockService',
-      'stockDataService', 'chartDataService', 'dateService',
+      '$scope', '$stateParams', '$window', '$ionicPopup', '$cordovaInAppBrowser',
+      'followStockService', 'stockDataService', 'chartDataService', 'dateService',
       'notesService', 'newsService',
-    function($scope, $stateParams, $window, $ionicPopup, followStockService,
-       stockDataService, chartDataService, dateService,
+    function($scope, $stateParams, $window, $ionicPopup, $cordovaInAppBrowser,
+       followStockService, stockDataService, chartDataService, dateService,
        notesService, newsService) {
 
       $scope.ticker = $stateParams.stockTicker;
@@ -286,8 +286,12 @@ angular.module('toroApp.controllers', [])
     }
 
     $scope.openWindow = function(link) {
-      //TODO install and set up inAppBrowser
-      console.log("openWindow –> " + link);
+      var inAppBrowserOptions = {
+        location: 'yes',
+        clearcache: 'yes',
+        toolbar: 'yes'
+      };
+      $cordovaInAppBrowser.open(link, '_blank', inAppBrowserOptions);
     };
 
     $scope.toggleFollow = function() {
