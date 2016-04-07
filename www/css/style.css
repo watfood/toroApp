@@ -1,29 +1,9 @@
-/* Notes card  */
-
-#stock-notes .add-stock-note {
-  border: 1px solid #ff9800;
-  border-radius: 3px;
-  color: #ff9800;
-  float: right;
-  font-size: 11pt;
-  font-weight: 300;
-  padding: 0 5px;
-}
-
-#stock-note-title {
-  border-bottom: 1px solid #eee;
-  padding: 0 5px;
-}
-
-#stock-note-body {
-  min-height: 100px;
-  padding: 10px 5px 5px;
-}
 
 /* Market data card  */
 
 #market-data-card {
   font-size: 3.25vmin;
+  /*color: white;*/
 }
 
 #market-data-card .col-20 {
@@ -255,9 +235,9 @@ svg text {
 /* Notes card  */
 
 #stock-notes .add-stock-note {
-  border: 1px solid #ff9800;
+  border: 1px solid #A9A9A9;
   border-radius: 3px;
-  color: #ff9800;
+  color: 	#A9A9A9;
   float: right;
   font-size: 11pt;
   font-weight: 300;
@@ -312,9 +292,8 @@ svg text {
   color: #fff;
 }
 
+
 /* My Stocks */
-
-
 
 #my-stocks {
   background-color: rgba(20, 20, 20, .975);

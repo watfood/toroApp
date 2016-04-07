@@ -8,7 +8,7 @@
     <button class="button icon-left ng-style:reactiveColor" ng-class="following ? 'ion-ios-checkmark-empty' : 'ion-ios-plus'" ng-bind="following ? 'Following ' : 'Follow '" ng-click="toggleFollow()"></button>
   </ion-nav-buttons>
 
-  <div class="bar bar-subheader bar-light">
+  <div class="bar bar-subheader bar-stable">
 
     <div class="buttons" side="left">
       <div class="button button-clear display-flex">
@@ -21,7 +21,9 @@
     <div class="buttons" side="right">
       <div class="button button-clear">
         <h6
-          id="stock-change" ng-class="stockPriceData.change < 0 ? 'assertive' : 'balanced'"><span ng-if="stockPriceData.change > 0">+</span>{{stockPriceData.change | number:2}}<br>(<span ng-if="stockPriceData.change > 0">+</span>{{stockPriceData.chg_percent | number:2}}%)</h6>
+          id="stock-change" ng-class="stockPriceData.change < 0 ? 'assertive' : 'balanced'">
+          <span ng-if="stockPriceData.change > 0">+</span>{{stockPriceData.change | number:2}}<br>(<span ng-if="stockPriceData.change > 0">+</span>{{stockPriceData.chg_percent | number:2}}%)
+        </h6>
       </div>
     </div>
 
@@ -100,7 +102,7 @@
 
 
     <div class="card" id="stock-notes">
-      <div class="item item-divider">Notes <span ng-click="addNote()" class="add-stock-note">Add <i class="icon ion-ios-plus"></i></span></div>
+      <div class="item item-divider">Notes <span ng-click="addNote()" class="add-stock-note">ADD NOTE <i class="icon ion-ios-plus"></i></span></div>
       <a class="item" ng-repeat="note in stockNotes track by $index" ng-click="openNote($index, note.title, note.body)">
         <h2>{{note.title}}</h2>
         <h6>{{note.date | date:'M/d/yy'}}</h6>
