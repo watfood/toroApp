@@ -235,6 +235,7 @@ angular.module('toroApp.services', [])
         var jsonData = json.query.results.quote;
         deferred.resolve(jsonData);
         stockDetailsCacheService.put(cacheKey, jsonData);
+        console.log("getDetailsData:", jsonData);
       })
       .error(function(error) {
         console.log("Details data error: " + error);
@@ -257,6 +258,7 @@ angular.module('toroApp.services', [])
         var jsonData = json.list.resources[0].resource.fields;
         stockPriceCacheService.put(cacheKey, jsonData);
         deferred.resolve(jsonData);
+        console.log("getPriceData:", jsonData);
       })
       .error(function(error) {
         console.log("Price data error: " + error);
@@ -307,7 +309,7 @@ angular.module('toroApp.services', [])
 
           volumeData.unshift(volumeDatum);
           priceData.unshift(priceDatum);
-
+          console.log("getHistoricalData: Logged");
         });
 
         var formattedChartData =
@@ -471,6 +473,7 @@ angular.module('toroApp.services', [])
           json = x2js.xml2json(xmlDoc),
           jsonData = json.rss.channel.item;
           deferred.resolve(jsonData);
+          console.log("getNews:", jsonData);
         })
         .error(function(error) {
           deferred.reject();
